@@ -1,5 +1,46 @@
+import ReduceParser from "./parsers/reduceParser.js";
+import MapParser from "./parsers/mapParser.js";
+
+/** An element that represents the "Process" button on the page. */
 const processButtonElement = document.getElementById('process');
 
+/**
+ * Checks the chosen parser and creates an instance of the right parser.
+ * <p>
+ * Throw an Error in case no parser is chosen.
+ *
+ * @returns {Parser} An instance of the chosen parser.
+ */
+function chooseParser() {
+
+    const parserOptions = document.getElementsByName('parser');
+
+    let parser;
+
+    parserOptions.forEach((option) => {
+        if (option.checked) {
+            switch (option.value) {
+                case 'map':
+                    parser = new MapParser();
+                    break;
+                case 'reduce':
+                    parser = new ReduceParser();
+            }
+        }
+    });
+
+    if (!parser) {
+        alert('Parser is not defined!');
+        throw new Error('Parser is not defined!');
+    }
+
+    return parser;
+}
+
+/**
+ * Clears the output list, provides the data from the input to the corresponding parser, and appends list items to
+ * the output list.
+ */
 function handleClick() {
 
     const inputElement = document.getElementById('input');
@@ -7,21 +48,11 @@ function handleClick() {
 
     outputElement.innerHTML = '';
 
-    const input = inputElement.value;
+    const parser = chooseParser();
 
-    let lines = input.split('\n');
+    const listItems = parser.parse(inputElement.value);
 
-    lines = lines.map((line) => line.split(',')
-        .map((value) => (value !== '') ? value : '<empty>')
-        .join(' ')
-    );
-
-    lines.forEach((line) => {
-        let listItem = document.createElement('li');
-        listItem.innerText = line;
-        outputElement.appendChild(listItem);
-    });
+    listItems.forEach((item) => outputElement.appendChild(item));
 }
-
 
 processButtonElement.addEventListener('click', handleClick);
