@@ -2,15 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <title>CSV</title>
+
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<span>Choose a parser:</span>
+
+<input type="radio" id="map-parser" name="parser" value="map">
+<label for="map-parser">Map Parser</label>
+
+<input type="radio" id="reduce-parser" name="parser" value="reduce">
+<label for="reduce-parser">Reduce Parser</label>
 
 <textarea id="input"></textarea>
 <button id="process">Process</button>
 <ol id="output"></ol>
 
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>
