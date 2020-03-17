@@ -7,25 +7,29 @@ export default class MapParser extends Parser {
 
     /**
      * Turns the provided string to an array of list items with the help of the javascript map method.
+     * @override
      *
      * @param {string} input - The string to be parsed.
-     * @returns {HTMLLIElement[]} List items to be appended to the output list.
+     * @returns {Promise<HTMLLIElement[]>} A promise that provides list items to be appended to the output list.
      */
-    parse(input) {
-        let lines = input.split('\n');
+    async parse(input) {
 
-        lines = lines.map(line =>
-            line.split(',')
-                .map((value) => (value !== '') ? value : '<empty>')
-                .join(' ')
-        );
+        return new Promise(resolve => {
+            let lines = input.split('\n');
 
-        const listItems = lines.map(line => {
-            const listItem = document.createElement('li');
-            listItem.innerText = line;
-            return listItem;
+            lines = lines.map(line =>
+                line.split(',')
+                    .map((value) => (value !== '') ? value : '<empty>')
+                    .join(' ')
+            );
+
+            const listItems = lines.map(line => {
+                const listItem = document.createElement('li');
+                listItem.innerText = line;
+                return listItem;
+            });
+
+            resolve(listItems);
         });
-
-        return listItems;
     }
 }

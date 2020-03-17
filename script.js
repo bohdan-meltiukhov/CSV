@@ -41,7 +41,7 @@ function chooseParser() {
  * Clears the output list, provides the data from the input to the corresponding parser, and appends list items to
  * the output list.
  */
-function handleClick() {
+async function handleClick() {
 
     const inputElement = document.getElementById('input');
     const outputElement = document.getElementById('output');
@@ -50,9 +50,12 @@ function handleClick() {
 
     const parser = chooseParser();
 
-    const listItems = parser.parse(inputElement.value);
+    // parser.parse(inputElement.value)
+    //     .then(items =>
+    //         items.forEach((item) => outputElement.appendChild(item)));
 
-    listItems.forEach((item) => outputElement.appendChild(item));
+    const items = await parser.parse(inputElement.value);
+    items.forEach((item) => outputElement.appendChild(item));
 }
 
 processButtonElement.addEventListener('click', handleClick);
