@@ -9,27 +9,30 @@ export default class ReduceParser extends Parser{
      * Turns the provided string to an array of list items with the help of the javascript reduce method.
      *
      * @param {string} input - The string to be parsed.
-     * @returns {HTMLLIElement[]} List items to be appended to the output list.
+     * @returns {Promise<HTMLLIElement[]>} A promise that provides list items to be appended to the output list.
      */
-    parse(input) {
-        let lines = input.split('\n');
+    async parse(input) {
 
-        lines = lines.reduce(function(modifiedLines, line) {
-            const modifiedLine = line.split(',')
-                .map((value) => (value !== '') ? value : '<empty>')
-                .join(' ');
+        return new Promise(resolve => {
+            let lines = input.split('\n');
 
-            modifiedLines.push(modifiedLine);
-            return modifiedLines;
-        }, []);
+            lines = lines.reduce(function(modifiedLines, line) {
+                const modifiedLine = line.split(',')
+                    .map((value) => (value !== '') ? value : '<empty>')
+                    .join(' ');
 
-        const listItems = lines.reduce(function(items, line) {
-            const listItem = document.createElement('li');
-            listItem.innerText = line;
-            items.push(listItem);
-            return items;
-        }, []);
+                modifiedLines.push(modifiedLine);
+                return modifiedLines;
+            }, []);
 
-        return listItems;
+            const listItems = lines.reduce(function(items, line) {
+                const listItem = document.createElement('li');
+                listItem.innerText = line;
+                items.push(listItem);
+                return items;
+            }, []);
+
+            resolve(listItems);
+        });
     }
 }
